@@ -27,7 +27,7 @@ To confirm the version of Helm which you have installed, enter the following -
 
 Enter Image
 
-## Deployment steps - Manual Installation
+## Deployment steps - Manual Installation/Setup
 
 ### 1. Start the minikube instance within Virtualbox/Hyperkit
      minikube start --driver=virtualbox/hyperkit
@@ -60,10 +60,34 @@ Enter Image
      kubectl  expose  pod  wordpress  --type=NodePort  --port=80  --dry-run=client -o yaml  >  service.yml
      kubectl delete pod wordpress
      ls -l
-     
+ 
 Enter Image of .yml files
 
-### 5. Helm Chart Installation
+### 5. Creating the Kubernetes Secret
+MySQL DB password values -
+
+     kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+     
+To view the secret values, enter the following -
+
+     kubectl get secret db-secret -o yaml
+
+Enter Image 
+
+Encode the plain-text passwords to an encoded format  -
+
+     echo -n 'mysql' | base64
+     echo -n 'root' | base64
+     echo -n 'passwd' | base64
+
+### 6. Secret Pod Injection
+Now that we have generated a secret for the MySQL DB credentials. It's now time to inject the Secret definitions within the wordpress.yml file, by appending the following text at the bottom of the yaml file -
+
+    envFrom:
+        - secretRef:
+            name: db-secret
+
+### 7. Helm Chart Installation
      helm install wordpress wordpress/
      
 ***NOTE:*** 
@@ -71,37 +95,50 @@ Enter Image of .yml files
 * wordpress/ is the directory folder where the templates folder and the Chart.yaml file exists.
 * This helm command will install the wordpress app (i.e. it will launch the wordpress/database pods and expose wordpress pod on port 80)
      
-### 6. Helm verification
+### 8. Helm verification
      helm list
 
 Enter image
 
 The status `deployed` indicates that the pods have been successfully deployed.
 
-### 7. Kubectl pod verification
+### 9. Kubectl pod verification
      kubectl get all
      
 Enter Image
 
-## Deployment steps - Automated Installation
+## Deployment steps - Automated Installation/Setup
 
-###	1. Clone the kubenetes-ingress-controller repo
+###	1. Clone the helm-wordpress-example repo
      git clone https://github.com/BJWRD/helm-wordpress-example
 
 ### 2. Start the minikube instance within Virtualbox
      minikube start --driver=virtualbox
 
+Enter Image
 
+### 3. Helm Chart Installation
+     helm install wordpress wordpress/
+     
+***NOTE:*** 
+* My Application name is wordpress 
+* wordpress/ is the directory folder where the templates folder and the Chart.yaml file exists.
+* This helm command will install the wordpress app (i.e. it will launch the wordpress/database pods and expose wordpress pod on port 80)
+     
+### 4. Helm verification
+     helm list
 
-### 8. Test Wordpress site accessibility
+## Test Wordpress site accessibility
+Now that the Kubernetes Wordpress Cluster has been deployed, it's time to test to see whether we can now access Wordpress -
+
+Enter the Host IP address followed by port 80 within a browser i.e. http://<Host IP>:8080
 
    Enter Image
 
 ### Teardown steps
 
 ### 1. Delete the deployed K8's infrastructure
-     kubectl delete -f 
-     kubectl delete -f 
+    Enter Helm command
     
 ### 2.  Delete the running minikube instance
      minikube delete
@@ -114,4 +151,3 @@ Enter Image
 * [K8s Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 * [Services- NodePort](https://kubernetes.io/docs/concepts/services-networking/service/)
 * [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
-* [PVC] Update me 
