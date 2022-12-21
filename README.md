@@ -1,5 +1,8 @@
 # helm-wordpress-example
-The following project takes you through the steps requires to deploy [Wordpress](https://wordpress.org/) via [Helm](https://helm.sh/).
+The following project takes you through the steps required to deploy a [Wordpress](https://wordpress.org/) system via the [Helm](https://helm.sh/) [Kubernetes](https://kubernetes.io/) Deployment tool.
+
+## Architecture
+
 
 ## How to Apply/Destroy
 This section details the deployment and teardown of the kubernetes-simple-webapp architecture. 
