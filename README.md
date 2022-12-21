@@ -2,7 +2,7 @@
 The following project takes you through the steps required to deploy a [Wordpress](https://wordpress.org/) system via the [Helm](https://helm.sh/) [Kubernetes](https://kubernetes.io/) Deployment tool.
 
 ## Architecture
-
+![image](https://user-images.githubusercontent.com/83971386/208942374-d4b84b9a-af40-4ca0-a197-33e2c2a54199.png)
 
 ## How to Apply/Destroy
 This section details the deployment and teardown of the kubernetes-simple-webapp architecture. 
