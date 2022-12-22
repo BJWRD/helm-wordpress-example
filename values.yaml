@@ -1,0 +1,36 @@
+# Default values for Wordpress Infrastructure
+# This is a YAML-formatted file
+# Declare variables to be passed into your templates
+
+namespace:
+  name: wordpress-app
+  app: wordpress
+  db: mysql
+
+secret:
+  secretName: db-secret
+  mysqlRootPassword: ZGItcGFzc3dvcmQ=
+
+wordpressPod:
+  podName: wordpress
+  containerName: wordpress
+  image: wordpress:latest
+
+wordpressService:
+  serviceName: wordpress
+  type: NodePort
+  nodePort: 30001
+
+databasePod:
+  podName: database
+  containerName: database
+  image: mysql:latest
+  user: root
+  database: wordpress
+
+databaseService:
+  serviceName: database
+  type: ClusterIP
+
+pullPolicy: IfNotPresent
+restartPolicy: Always
