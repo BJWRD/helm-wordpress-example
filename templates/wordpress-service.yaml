@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.wordpressService.serviceName }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  type: {{ .Values.wordpressService.type }}
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: {{ .Values.wordpressService.nodePort }}
