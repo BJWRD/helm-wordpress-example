@@ -30,12 +30,12 @@ To confirm the version of Helm which you have installed, enter the following -
 
 Enter Image
 
-## Deployment steps - Manual Installation/Setup
+## 1) Deployment steps - Manual Installation/Setup
 
 ### 1. Start the minikube instance within Virtualbox/Hyperkit
      minikube start --driver=virtualbox/hyperkit
 
-Enter Image
+<img width="475" alt="image" src="https://user-images.githubusercontent.com/83971386/209128627-b929484a-687f-4251-bd5b-198bd4424027.png">
 
 ### 2. Setup your Directory structure
      mkdir -p wordpress/templates
@@ -64,33 +64,35 @@ Enter Image
      kubectl delete pod wordpress
      ls -l
  
-Enter Image of .yml files
+<img width="335" alt="image" src="https://user-images.githubusercontent.com/83971386/209128737-eba9218d-6293-4a2e-9eeb-8bcfc34dc3f9.png">
 
 ### 5. Creating the Kubernetes Secret
 MySQL DB password values -
 
-     kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+     kubectl create secret generic db-secret --from-literal=MYSQL_ROOT_PASSWORD-sql01
      
 To view the secret values, enter the following -
 
      kubectl get secret db-secret -o yaml
 
-Enter Image 
+<img width="356" alt="image" src="https://user-images.githubusercontent.com/83971386/209127042-1a2f6f34-1a5c-4259-baff-d0d67c61bbb8.png">
 
 Encode the plain-text passwords to an encoded format  -
 
-     echo -n 'mysql' | base64
-     echo -n 'root' | base64
-     echo -n 'passwd' | base64
+     echo -n 'mysql01' | base64
 
 ### 6. Secret Pod Injection
 Now that we have generated a secret for the MySQL DB credentials. It's now time to inject the Secret definitions within the wordpress.yml file, by appending the following text at the bottom of the yaml file -
 
     envFrom:
-        - secretRef:
-            name: db-secret
+      - secretRef:
+          name: db-secret
+
+<img width="208" alt="image" src="https://user-images.githubusercontent.com/83971386/209127461-efdfb2d6-dc1e-4594-a786-1c448c7e859f.png">
 
 ### 7. Helm Chart Installation
+
+     cd ../..
      helm install wordpress wordpress/
      
 ***NOTE:*** 
@@ -110,7 +112,7 @@ The status `deployed` indicates that the pods have been successfully deployed.
      
 Enter Image
 
-## Deployment steps - Automated Installation/Setup
+## 2) Deployment steps - Automated Installation/Setup
 
 ###	1. Clone the helm-wordpress-example repo
      git clone https://github.com/BJWRD/helm-wordpress-example
@@ -118,7 +120,7 @@ Enter Image
 ### 2. Start the minikube instance within Virtualbox
      minikube start --driver=virtualbox
 
-Enter Image
+<img width="475" alt="image" src="https://user-images.githubusercontent.com/83971386/209128607-3da863f9-b5f7-47ab-909c-fee6409a3b55.png">
 
 ### 3. Helm Chart Installation
      helm install wordpress wordpress/
@@ -131,17 +133,36 @@ Enter Image
 ### 4. Helm verification
      helm list
 
+## 3) Deployment steps - Utilising Bitnami Wordpress Repository
+
+### 1. Add the Bitnami Repo to your local host
+    
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    
+### 2. Helm Chart Installation
+
+    helm install my-release bitnami/wordpress
+    
+<img width="620" alt="image" src="https://user-images.githubusercontent.com/83971386/209133608-eeb25fa8-9238-401c-a210-b06050e009b6.png">
+
 ## Test Wordpress site accessibility
-Now that the Kubernetes Wordpress Cluster has been deployed, it's time to test to see whether we can now access Wordpress -
+Now that the Kubernetes Wordpress Cluster has been deployed, it's time to test to see whether we can now access the Wordpress site.
 
-Enter the Host IP address followed by port 80 within a browser i.e. http://<Host IP>:8080
+Firstly verify the Minikube Network settings -
 
-   Enter Image
+    minikube ip
+    minikube service list
+    
+<img width="384" alt="image" src="https://user-images.githubusercontent.com/83971386/209134617-0ccd31a5-4cca-4dda-bf62-f48c7412d5e6.png">
+
+Once confirmed, enter the address within a browser (http://<IP>:<Port>) and you will then be presented with the Wordpress welcome screen -
+
+<img width="521" alt="image" src="https://user-images.githubusercontent.com/83971386/209134776-18a948ff-9a27-4a0d-95c6-0db0bcc4df23.png">
 
 ### Teardown steps
 
 ### 1. Delete the deployed K8's infrastructure
-    Enter Helm command
+    helm uninstall wordpress
     
 ### 2.  Delete the running minikube instance
      minikube delete
