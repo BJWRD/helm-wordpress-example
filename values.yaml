@@ -14,7 +14,8 @@ secret:
 wordpressPod:
   podName: wordpress
   containerName: wordpress
-  image: wordpress:latest
+  image: wordpress
+  tag: latest
 
 wordpressService:
   serviceName: wordpress
@@ -24,7 +25,8 @@ wordpressService:
 databasePod:
   podName: database
   containerName: database
-  image: mysql:latest
+  image: mysql
+  tag: latest
   user: root
   database: wordpress
 
