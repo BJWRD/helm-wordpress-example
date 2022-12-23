@@ -12,8 +12,9 @@ secret:
   mysqlRootPassword: ZGItcGFzc3dvcmQ=
 
 wordpressPod:
-  podName: wordpress
-  containerName: wordpress
+  podName: wordpress-app
+  tier: frontend
+  containerName: wordpress-app
   image: wordpress
   tag: latest
 
@@ -23,8 +24,9 @@ wordpressService:
   nodePort: 30001
 
 databasePod:
-  podName: database
-  containerName: database
+  podName: wordpress-db
+  tier: backend
+  containerName: wordpress-db
   image: mysql
   tag: latest
   user: root
