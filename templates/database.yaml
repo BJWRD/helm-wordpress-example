@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: {{ .Values.databasePod.containerName }}
-      image: {{ .Values.databasePod.image }}
+      image: {{ .Values.databasePod.image }}:{{ .Values.databasePod.tag }}
       imagePullPolicy: {{ .Values.pullPolicy }}
       ports:
         - containerPort: 3306

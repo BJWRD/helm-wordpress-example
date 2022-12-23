@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: {{ .Values.wordpressPod.containerName }}
-      image: {{ .Values.wordpressPod.image }}
+      image: {{ .Values.wordpressPod.image }}:{{ .Values.wordpressPod.tag }}
       imagePullPolicy: {{ .Values.pullPolicy }}
       ports:
         - containerPort: 80
