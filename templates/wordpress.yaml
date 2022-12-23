@@ -3,6 +3,8 @@ kind: Pod
 metadata:
   name: {{ .Values.wordpressPod.podName }}
   namespace: {{ .Values.namespace.name }}
+  labels:
+    tier: {{ .Values.wordpressPod.tier }}
 spec:
   containers:
     - name: {{ .Values.wordpressPod.containerName }}
