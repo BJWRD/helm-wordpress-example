@@ -1,5 +1,10 @@
 # helm-wordpress-example
-The following project takes you through the steps required to deploy a [Wordpress](https://wordpress.org/) system via the [Helm](https://helm.sh/) [Kubernetes](https://kubernetes.io/) Deployment tool.
+The following project takes you through the steps required to deploy a [Wordpress](https://wordpress.org/) site via the [Helm](https://helm.sh/) [Kubernetes](https://kubernetes.io/) Deployment tool.
+
+There are two alternative ways of deploying the Wordpress Chart. Both methods have been detailed within the following README file -
+
+* Deployment steps - Automated Installation/Setup 
+* Deployment steps - Utilising Bitnami Wordpress Repository
 
 ## Architecture
 ![image](https://user-images.githubusercontent.com/83971386/208942748-439a100e-d25a-4f1e-8657-006a595548c9.png)
@@ -28,91 +33,9 @@ To confirm the version of Helm which you have installed, enter the following -
 
     helm version
 
-Enter Image
+<img width="384" alt="image" src="https://user-images.githubusercontent.com/83971386/209154939-a415a012-812a-46a5-91a7-31541d830724.png">
 
-## 1) Deployment steps - Manual Installation/Setup
-
-### 1. Start the minikube instance within Virtualbox/Hyperkit
-     minikube start --driver=virtualbox/hyperkit
-
-<img width="475" alt="image" src="https://user-images.githubusercontent.com/83971386/209128627-b929484a-687f-4251-bd5b-198bd4424027.png">
-
-### 2. Setup your Directory structure
-     mkdir -p wordpress/templates
-     
-### 3. Create the Chart.yaml file
-     cd wordpress
-     vi Chart.yaml
-
-***NOTE:*** Ensure that the ***C*** within the Chart.yaml file is capitalised. This file consists of the metadata about the Chart. i.e., The name of the chart, version, and app version, etc.
-
-     apiVersion: v1
-     name: Wordpress
-     decription: Helm Chart setup for Wordpress instance
-     version: 0.1
-     appVersion: "0.16.0"
-     keywords:
-        - wordpress
-        - database
-
-### 4. Create the yaml files
-     cd wordpress/templates
-     kubectl run wordpress --image=wordpress:latest --dry-run=client -o yaml > wordpress.yml
-     kubectl run database --image=mysql:latest --dry-run=client -o yaml > database.yml
-     kubectl create -f wordpress.yml
-     kubectl  expose  pod  wordpress  --type=NodePort  --port=80  --dry-run=client -o yaml  >  service.yml
-     kubectl delete pod wordpress
-     ls -l
- 
-<img width="335" alt="image" src="https://user-images.githubusercontent.com/83971386/209128737-eba9218d-6293-4a2e-9eeb-8bcfc34dc3f9.png">
-
-### 5. Creating the Kubernetes Secret
-MySQL DB password values -
-
-     kubectl create secret generic db-secret --from-literal=MYSQL_ROOT_PASSWORD-sql01
-     
-To view the secret values, enter the following -
-
-     kubectl get secret db-secret -o yaml
-
-<img width="356" alt="image" src="https://user-images.githubusercontent.com/83971386/209127042-1a2f6f34-1a5c-4259-baff-d0d67c61bbb8.png">
-
-Encode the plain-text passwords to an encoded format  -
-
-     echo -n 'mysql01' | base64
-
-### 6. Secret Pod Injection
-Now that we have generated a secret for the MySQL DB credentials. It's now time to inject the Secret definitions within the wordpress.yml file, by appending the following text at the bottom of the yaml file -
-
-    envFrom:
-      - secretRef:
-          name: db-secret
-
-<img width="208" alt="image" src="https://user-images.githubusercontent.com/83971386/209127461-efdfb2d6-dc1e-4594-a786-1c448c7e859f.png">
-
-### 7. Helm Chart Installation
-
-     cd ../..
-     helm install wordpress wordpress/
-     
-***NOTE:*** 
-* My Application name is wordpress 
-* wordpress/ is the directory folder where the templates folder and the Chart.yaml file exists.
-* This helm command will install the wordpress app (i.e. it will launch the wordpress/database pods and expose wordpress pod on port 80)
-     
-### 8. Helm verification
-     helm list
-
-Enter image
-
-The status `deployed` indicates that the pods have been successfully deployed.
-
-### 9. Kubectl pod verification
-     kubectl get all
-     
-Enter Image
-
-## 2) Deployment steps - Automated Installation/Setup
+## Deployment steps - Automated Installation/Setup
 
 ###	1. Clone the helm-wordpress-example repo
      git clone https://github.com/BJWRD/helm-wordpress-example
@@ -123,7 +46,7 @@ Enter Image
 <img width="475" alt="image" src="https://user-images.githubusercontent.com/83971386/209128607-3da863f9-b5f7-47ab-909c-fee6409a3b55.png">
 
 ### 3. Helm Chart Installation
-     helm install wordpress wordpress/
+     helm install wordpress helm-wordpress-example/
      
 ***NOTE:*** 
 * My Application name is wordpress 
@@ -133,7 +56,10 @@ Enter Image
 ### 4. Helm verification
      helm list
 
-## 3) Deployment steps - Utilising Bitnami Wordpress Repository
+### 5. Kubectl pod verification
+     kubectl get all --all-namespaces
+     
+## Deployment steps - Utilising Bitnami Wordpress Repository
 
 ### 1. Add the Bitnami Repo to your local host
     
@@ -159,6 +85,8 @@ Once confirmed, enter the address within a browser (http://<IP>:<Port>) and you 
 
 <img width="521" alt="image" src="https://user-images.githubusercontent.com/83971386/209134776-18a948ff-9a27-4a0d-95c6-0db0bcc4df23.png">
 
+<img width="323" alt="image" src="https://user-images.githubusercontent.com/83971386/209340221-e0fd7757-b183-477a-bafd-04d2f20d8edc.png">
+
 ### Teardown steps
 
 ### 1. Delete the deployed K8's infrastructure
@@ -173,5 +101,5 @@ Once confirmed, enter the address within a browser (http://<IP>:<Port>) and you 
 * [Hyperkit](https://minikube.sigs.k8s.io/docs/drivers/hyperkit/)
 * [Helm](https://helm.sh/)
 * [K8s Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
-* [Services- NodePort](https://kubernetes.io/docs/concepts/services-networking/service/)
+* [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
 * [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
