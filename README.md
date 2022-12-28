@@ -10,7 +10,7 @@ There are two alternative ways of deploying the Wordpress Chart. Both methods ha
 ![image](https://user-images.githubusercontent.com/83971386/208942748-439a100e-d25a-4f1e-8657-006a595548c9.png)
 
 ## How to Apply/Destroy
-This section details the deployment and teardown of the kubernetes-simple-webapp architecture. 
+This section details the deployment and teardown of the helm-wordpress-example architecture. 
 
 ## Prerequisites
 * Minikube installation - [steps](https://minikube.sigs.k8s.io/docs/start/)
